@@ -1,4 +1,4 @@
-module github.com/Kichiyaki/go-pg-logrus-debug-hook
+module github.com/Kichiyaki/go-pg-logrus-query-logger/v10
 
 go 1.16
 
