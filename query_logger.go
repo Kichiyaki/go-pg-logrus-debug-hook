@@ -8,13 +8,17 @@ import (
 )
 
 type QueryLogger struct {
-	Entry          *logrus.Entry
+	Log            logrus.FieldLogger
 	MaxQueryLength int
 }
 
 var _ pg.QueryHook = (*QueryLogger)(nil)
 
 func (logger QueryLogger) BeforeQuery(ctx context.Context, evt *pg.QueryEvent) (context.Context, error) {
+	if logger.Log == nil {
+		return ctx, nil
+	}
+
 	q, err := evt.FormattedQuery()
 	if err != nil {
 		return nil, err
@@ -25,9 +29,9 @@ func (logger QueryLogger) BeforeQuery(ctx context.Context, evt *pg.QueryEvent) (
 	}
 
 	if evt.Err != nil {
-		logger.Entry.Errorf("%s executing a query:\n%s\n", evt.Err, prepared)
+		logger.Log.Errorf("%s executing a query:\n%s\n", evt.Err, prepared)
 	} else {
-		logger.Entry.Info(prepared)
+		logger.Log.Info(prepared)
 	}
 
 	return ctx, nil
