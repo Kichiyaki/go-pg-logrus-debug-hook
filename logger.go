@@ -7,14 +7,14 @@ import (
 	"strings"
 )
 
-type QueryLogger struct {
+type Logger struct {
 	Log            logrus.FieldLogger
 	MaxQueryLength int
 }
 
-var _ pg.QueryHook = (*QueryLogger)(nil)
+var _ pg.QueryHook = (*Logger)(nil)
 
-func (logger QueryLogger) BeforeQuery(ctx context.Context, evt *pg.QueryEvent) (context.Context, error) {
+func (logger Logger) BeforeQuery(ctx context.Context, evt *pg.QueryEvent) (context.Context, error) {
 	if logger.Log == nil {
 		return ctx, nil
 	}
@@ -37,6 +37,6 @@ func (logger QueryLogger) BeforeQuery(ctx context.Context, evt *pg.QueryEvent) (
 	return ctx, nil
 }
 
-func (QueryLogger) AfterQuery(context.Context, *pg.QueryEvent) error {
+func (Logger) AfterQuery(context.Context, *pg.QueryEvent) error {
 	return nil
 }
