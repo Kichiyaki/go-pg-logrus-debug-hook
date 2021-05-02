@@ -1,4 +1,4 @@
-package gopglogrusquerylogger
+package querylogger
 
 import (
 	"context"
